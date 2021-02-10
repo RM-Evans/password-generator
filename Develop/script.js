@@ -1,16 +1,25 @@
 // Assignment code here
 function promptCritera() {
-  var min = window.prompt("minimum number of characters?")
-  var max = window.prompt("maximum number of characters?")
+  // var min = window.prompt("minimum number of characters?")
+  // var max = window.prompt("maximum number of characters?")
+  var length = window.prompt("Choose length of password between 8 and 128 characters")
+  //yell at me IF above or below numbers
+  if(length < 8 || length > 128) {
+
+    window.alert("NO! BAD! PICK A NUMBER BETWEEN 8 AND 128")
+    return promptCritera();
+    // //resets and runs through uppercase to specialcase twice?????
+
+  }
   var uppercase = window.confirm("You want uppercase letters?")
   var lowercase = window.confirm("you want lowercase letters?")
   var numbers = window.confirm("you want numbers?")
   var specialcase = window.confirm("you want special characters?")
-  return generatePassword(min, max, uppercase, lowercase, numbers, specialcase)
+  generatePassword(length, uppercase, lowercase, numbers, specialcase)
 }
 
 
-//my math for finding my
+//my math for finding my random number
 
 function randomWholeNumber(min, max) {
   var bounds = max - min
@@ -19,13 +28,17 @@ function randomWholeNumber(min, max) {
   return rand
 }
 
-function generatePassword(min, max, useUppercase, useLowercase, useSpecial, useNumbers){
+function generatePassword(length, useUppercase, useLowercase, useNumbers, useSpecial){
 var password = ""
 
-//let min = 8
-//let max = 
+//fixed: were passed through as a string, caused randomWholeNumber to return as a string
+//max-min were not defined as strings so it couldnt do the math bc not numbers
+//  min = parseInt(min);
+//  max = parseInt(max);
 
-let length = randomWholeNumber(min, max)
+length = parseInt(length)
+
+// let length = randomWholeNumber(min, max)
 
 var options = []
 
@@ -40,7 +53,7 @@ if (useLowercase) {
 if (useUppercase) {
   let offset = 97
   for (let i = 0; i < 26; i++) {
-    options.push(String.fromCharCode(offset + i).toUpperCase) //forced to be uppercase
+    options.push(String.fromCharCode(offset + i).toUpperCase()) //forced to be uppercase
   }
 }
 
@@ -52,11 +65,14 @@ if(useSpecial){
 }
 
 if(useNumbers){
+  //debugger;
   //another for...of loop
   for(let number of '0123456789'){
     options.push(number)
   }
 }
+
+console.log(length);
 
 for(let i = 0; i < length; i++) {
   //has array options, needs random characters in options
@@ -64,20 +80,23 @@ for(let i = 0; i < length; i++) {
   let char = options[index]
   password = password + char
 }
-return password
+writePassword(password);
 }
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
+function writePassword(password) {
+  // var password = generatePassword();
   var passwordText = document.querySelector("#password");
 
-  passwordText.value = password;
+  passwordText.innerText = password;
 
 }
 
 // Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
+//generateBtn.addEventListener("click", writePassword);
+
+//[object mouse event]
+generateBtn.addEventListener("click", promptCritera);
 
